@@ -148,11 +148,10 @@ namespace Rasterization
 			return I - Nn * Nn.Dot(I) * 2.0f;
 		}
 
-
 		public static vector3 Saturate(vector3 v)
 		{
 			Vector128<float> a = Vector128.Create(v.X, v.Y, v.Z, 0f);
-			Vector128<float> min = Vector128.Create(1f, 1f, 1f, 0f);
+			Vector128<float> min = Vector128.Create(255f, 255f, 255f, 0f);
 			Vector128<float> max = Vector128.Create(0f, 0f, 0f, 0f);
 			Vector128<float> result = Sse.Max(Sse.Min(a, min), max);
 			return new vector3(result.GetElement(0), result.GetElement(1), result.GetElement(2));
@@ -160,10 +159,10 @@ namespace Rasterization
 
 		public static vector4 Mul(matrix4 matrix, vector4 v)
 		{
-			Vector128<float> a1 = Vector128.Create(matrix.mat[0, 0], matrix.mat[1, 0], matrix.mat[2, 0], matrix.mat[3, 0]);
-			Vector128<float> a2 = Vector128.Create(matrix.mat[0, 1], matrix.mat[1, 1], matrix.mat[2, 1], matrix.mat[3, 1]);
-			Vector128<float> a3 = Vector128.Create(matrix.mat[0, 2], matrix.mat[1, 2], matrix.mat[2, 2], matrix.mat[3, 2]);
-			Vector128<float> a4 = Vector128.Create(matrix.mat[0, 3], matrix.mat[1, 3], matrix.mat[2, 3], matrix.mat[3, 3]);
+			Vector128<float> a1 = Vector128.Create(matrix.mat[0, 0], matrix.mat[0, 1], matrix.mat[0, 2], matrix.mat[0, 3]);
+			Vector128<float> a2 = Vector128.Create(matrix.mat[1, 0], matrix.mat[1, 1], matrix.mat[1, 2], matrix.mat[1, 3]);
+			Vector128<float> a3 = Vector128.Create(matrix.mat[2, 0], matrix.mat[2, 1], matrix.mat[2, 2], matrix.mat[2, 3]);
+			Vector128<float> a4 = Vector128.Create(matrix.mat[3, 0], matrix.mat[3, 1], matrix.mat[3, 2], matrix.mat[3, 3]);
 
 			Vector128<float> b = Vector128.Create(v.X, v.Y, v.Z, v.W);
 
@@ -182,8 +181,11 @@ namespace Rasterization
 
 		public static matrix4 Mul(matrix4 matrix1, matrix4 matrix2)
 		{
-			matrix4 result = new matrix4(Mul(matrix1, new vector4(matrix2.mat[0, 0], matrix2.mat[0, 1], matrix2.mat[0, 2], matrix2.mat[0, 3])), Mul(matrix1, new vector4(matrix2.mat[1, 0], matrix2.mat[1, 1], matrix2.mat[1, 2], matrix2.mat[1, 3])),
-											Mul(matrix1, new vector4(matrix2.mat[2, 0], matrix2.mat[2, 1], matrix2.mat[2, 2], matrix2.mat[2, 3])), Mul(matrix1, new vector4(matrix2.mat[3, 0], matrix2.mat[3, 1], matrix2.mat[3, 2], matrix2.mat[3, 3])));
+			matrix4 result = new matrix4(
+											Mul(matrix1, new vector4(matrix2.mat[0, 0], matrix2.mat[1, 0], matrix2.mat[2, 0], matrix2.mat[3, 0])), 
+											Mul(matrix1, new vector4(matrix2.mat[0, 1], matrix2.mat[1, 1], matrix2.mat[2, 1], matrix2.mat[3, 1])),
+											Mul(matrix1, new vector4(matrix2.mat[0, 2], matrix2.mat[1, 2], matrix2.mat[2, 2], matrix2.mat[3, 2])), 
+											Mul(matrix1, new vector4(matrix2.mat[0, 3], matrix2.mat[1, 3], matrix2.mat[2, 3], matrix2.mat[3, 3])));
 
 			return result;
 		}

@@ -58,6 +58,8 @@ namespace Rasterization
 
         #region Przeciązanie operatorów
 
+        public static vector4 operator *(vector4 a, vector4 b) => new vector4(a.X * b.X, a.Y * b.Y, a.Z * b.Z, a.W * b.W);
+        public static vector4 operator /(vector4 a, vector4 b) => new vector4(a.X / b.X, a.Y / b.Y, a.Z / b.Z, a.W / b.W);
         //suma dwoch wektorow
         public static vector4 operator +(vector4 v, vector4 v2)
         {
@@ -170,6 +172,20 @@ namespace Rasterization
             }
         }
 
+        public vector4 Normalize2(vector4 _v)
+        {
+            vector4 v = _v;
+            float len = this.GetLength();
+            if (len > eps)
+            {
+                return (this) * (1 / len);
+            }
+            else
+            {
+                return v = new vector4(.0f, .0f, .0f, .0f);
+            }
+        }
+
         void Negative()
         {
             this.X = -X;
@@ -185,5 +201,10 @@ namespace Rasterization
         }
 
         #endregion
+
+        public override string ToString()
+        {
+            return $"[{X}, {Y}, {Z}, {W}]";
+        }
     }
 }

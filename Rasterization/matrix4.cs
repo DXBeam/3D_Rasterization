@@ -17,7 +17,7 @@ namespace Rasterization
         public matrix4(vector4 v1, vector4 v2, vector4 v3, vector4 v4)
         {
             mat = new float[4, 4];
-
+            
             mat[0, 0] = v1.X;
             mat[1, 0] = v1.Y;
             mat[2, 0] = v1.Z;
@@ -123,8 +123,8 @@ namespace Rasterization
             m.mat[3,3] = mat[3,0] * matrix2.mat[0,3] + mat[3,1] * matrix2.mat[1,3] + mat[3,2] * matrix2.mat[2,3] + mat[3,3] * matrix2.mat[3,3];
 
             return new matrix4(
-                m.mat[0,0], m.mat[0,1], m.mat[0,2], m.mat[0,3], 
-                m.mat[1,0], m.mat[1,1], m.mat[1,2], m.mat[1,3], 
+                m.mat[0,0], m.mat[0,1], m.mat[0,2], m.mat[0,3],
+                m.mat[1,0], m.mat[1,1], m.mat[1,2], m.mat[1,3],
                 m.mat[2,0], m.mat[2,1], m.mat[2,2], m.mat[2,3],
                 m.mat[3,0], m.mat[3,1], m.mat[3,2], m.mat[3,3]);
         }
@@ -149,6 +149,11 @@ namespace Rasterization
             Console.WriteLine(mat[1, 0] + "\t" + mat[1, 1] + "\t" + mat[1, 2] + "\t" + mat[1, 3]);
             Console.WriteLine(mat[2, 0] + "\t" + mat[2, 1] + "\t" + mat[2, 2] + "\t" + mat[2, 3]);
             Console.WriteLine(mat[3, 0] + "\t" + mat[3, 1] + "\t" + mat[3, 2] + "\t" + mat[3, 3]);
+        }
+
+        public override string ToString()
+        {
+            return $"[{mat[0, 0]}, {mat[0, 1]}, {mat[0, 2]}, {mat[0, 3]}]\n[{mat[1, 0]}, {mat[1, 1]}, {mat[1, 2]}, {mat[1, 3]}]\n[{mat[2, 0]}, {mat[2, 1]}, {mat[2, 2]}, {mat[2, 3]}]\n[{mat[3, 0]}, {mat[3, 1]}, {mat[3, 2]}, {mat[3, 3]}]";
         }
     }
 }
