@@ -18,9 +18,12 @@ namespace Rasterization
             Y = y;
             Z = z;
         }
+        public static vector3 operator -(vector3 a, float b) => a + (-b);
         public static vector3 operator *(vector3 a, float b) => new vector3(a.X * b, a.Y * b, a.Z * b); //Оператор умножения.
         public static vector3 operator *(vector3 a, vector3 b) => new vector3(a.X * b.X, a.Y * b.Y, a.Z * b.Z); //Оператор умножения.
         public static vector3 operator /(vector3 a, float b) => new vector3(a.X / b, a.Y / b, a.Z / b); //Оператор умножения.
+        public static vector3 operator /(vector3 a, vector3 b) => new vector3(a.X / b.X, a.Y / b.Y, a.Z / b.Z);
+        public static vector3 operator +(vector3 a, float b) => new vector3(a.X + b, a.Y + b, a.Z + b);
 
         //public static vector3 operator +(vector3 a, vector3 b) => new vector3(a.X + b.X, a.Y + b.Y, a.Z + b.Z); //Оператор суммирования.
         public static vector3 operator +(vector3 v, vector3 v2)
@@ -79,6 +82,11 @@ namespace Rasterization
             vector3 Nn = N.Normalize();
 
             return I - Nn * Nn.Dot(I) * 2.0f;
+        }
+
+        public override string ToString()
+        {
+            return $"[{X}, {Y}, {Z}]";
         }
     }
 }
