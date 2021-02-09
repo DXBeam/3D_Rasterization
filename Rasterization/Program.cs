@@ -7,62 +7,84 @@ namespace Rasterization
     {
         static void Main(string[] args)
         {
-            Buffer buffer = new Buffer(500, 500, Color.Black);
-            Rasterization raster = new Rasterization(buffer);
-            VertexProcessor vertex = new VertexProcessor(); // Sphere
-            VertexProcessor vertex2 = new VertexProcessor(); // Cylinder
-            VertexProcessor vertex3 = new VertexProcessor(); // Cone
-            Sphere sphere = new Sphere();
-            Cylinder cylinder = new Cylinder();
-            Cone cone = new Cone();
+            
+            vector3 testv = new vector3(250, 1123, 895);
+            vector3 testvv = new vector3(250, 1123, 895);
+            vector3 test2v = new vector3(510, 932, 487);
 
-            DirectionalLight light = new DirectionalLight(new vector3(0,0,1), new vector3(100,100,100), new vector3(200,0,0), new vector3(0,200,00), 10f); 
-            PointLight light2 = new PointLight(new vector3(-1, 0, 0), new vector3(100, 100, 100), new vector3(200, 0, 0), new vector3(0, 200, 00), 10f);
-            ReflectLight light3 = new ReflectLight(new vector3(0, 0, 0), new vector3(0,0,1), 40f, new vector3(100, 100, 100), new vector3(200, 0, 0), new vector3(0, 200, 00), 10f);
-            DirectionalLight lightOff = new DirectionalLight(new vector3(0,0,1), new vector3(255,255,255), new vector3(0, 0, 0), new vector3(0, 0, 0), 10f);
+            vector4 testV41 = new vector4(748, 741, 256, 201);
+            vector4 testV42 = new vector4(348, 241, 656, 101);
 
-            Bitmap texture1 = new Bitmap("brick.jpg");
-            Bitmap texture2 = new Bitmap("checker.jpg");
+            float test3f = 7.4f;
+            var testing = (testv / test3f);
+            matrix4 matTest = new matrix4(testV41, testV42, testV41, testV42);
+            matrix4 matTest2 = new matrix4(testV42, testV41, testV42, testV41);
 
-            vertex.MultiplyByTranslation(new vector3(0.5f, 0f, 0f)); // Move
-            vertex.MultiplyByRotation(0f, new vector3(0f, 0f, 0f)); //Rotation
-            vertex.MultiplyByScale(new vector3(0.25f, 0.25f, 0.25f)); //Scale
-            vertex.GetMatrix(); //Building
+            // Vector by Vector
+            Console.WriteLine("SSE Add Vector3 by Vector3: " + MathSSE.Add(testv, test2v));
+            Console.WriteLine("FPU Add Vector3 by Vector3: " + (testv + test2v));
+            Console.WriteLine("SSE Substract Vector3 by Vector3: " + MathSSE.Substract(testv, test2v));
+            Console.WriteLine("FPU Substract Vector3 by Vector3: " + (testv - test2v));
+            Console.WriteLine("SSE Multiply Vector3 by Vector3: " + MathSSE.Multiply(testv, test2v));
+            Console.WriteLine("FPU Multiply Vector3 by Vector3: " + (testv * test2v));
+            Console.WriteLine("SSE Divide Vector3 by Vector3: " + MathSSE.Divide(testv, test2v));
+            Console.WriteLine("FPU Divide Vector3 by Vector3: " + (testv / test2v));
 
-            vertex2.MultiplyByTranslation(new vector3(0f, 0f, 0f)); // Move
-            vertex2.MultiplyByRotation(140f, new vector3(140f, 0f, 0f)); //Rotation
-            vertex2.MultiplyByScale(new vector3(0.3f, 0.3f, 0.3f)); //Scale
-            vertex2.GetMatrix(); //Building
+            // Vector by float
+            Console.WriteLine("SSE Add Vector3 by float: " + MathSSE.Add(testv, test3f));
+            Console.WriteLine("FPU Add Vector3 by float: " + (testv + test3f));
+            Console.WriteLine("SSE Substract Vector3 by float: " + MathSSE.Substract(test2v, test3f));
+            Console.WriteLine("FPU Substract Vector3 by float: " + (test2v - test3f));
+            Console.WriteLine("SSE Multiply Vector3 by float: " + MathSSE.Multiply(testv, test3f));
+            Console.WriteLine("FPU Multiply Vector3 by float: " + (testv * test3f));
+            Console.WriteLine("SSE Divide Vector3 by float: " + MathSSE.Divide(testv, test3f));
+            Console.WriteLine("FPU Divide Vector3 by float: " + (testv / test3f));
 
-            vertex3.MultiplyByTranslation(new vector3(-0.5f, 0f, 0f)); // Move
-            vertex3.MultiplyByRotation(140f, new vector3(-140f, 0f, 0f)); //Rotation
-            vertex3.MultiplyByScale(new vector3(0.3f, 0.3f, 0.3f)); //Scale
-            vertex3.GetMatrix(); //Building
+            //Vector by float by vector
+            MathSSE.Divide(testv, test3f, testv);
+            
+            Console.WriteLine("SSE Divide Vector3 by float by Vector3:" + testv);
+            Console.WriteLine("FPU Divide Vector3 by float by Vector3:" + testing);
 
+            //Normalize
+            Console.WriteLine("SSE Normalize:" + MathSSE.Normalize(testv));
+            Console.WriteLine("FPU Normalize:" + (testv.Normalize()));
 
-            sphere.DrawPixelLight(raster, vertex, lightOff, texture1); //Sphere Rasterization
-            cylinder.DrawPixelLight(raster, vertex2, light, texture1); //Cylinder Rasterization
-            cone.DrawPixelLight(raster, vertex3, light, texture2); //Cone Rasterization
+            //Dot
+            Console.WriteLine("SSE Dot:" + MathSSE.Dot(testv, test2v));
+            Console.WriteLine("FPU Dot:" + (testv.Dot(test2v)));
 
-            /*
-            raster.Triangle(
-                vertex.tr(new vector3(-0.5f, -0.5f, 0f)),
-                vertex.tr(new vector3(0f, 0.5f, 0f)),
-                vertex.tr(new vector3(0.5f, -0.5f, 0f)),
-                new vector3(255, 0, 0), new vector3(0, 255, 0), new vector3(0, 0, 255));
-            raster.Triangle(
-                vertex.tr(new vector3(-1.1f, 0.5f, 0.9f)),
-                vertex.tr(new vector3(0.6f, 0f, -0.1f)),
-                vertex.tr(new vector3(-0.9f, -1.1f, 0.5f)),
-                new vector3(255, 0, 0), new vector3(0, 255, 0), new vector3(0, 0, 255));
+            //Cross
+            Console.WriteLine("SSE Cross:" + MathSSE.CrossProduct(testv, test2v));
+            Console.WriteLine("FPU Cross:" + (testv.Cross(test2v)));
 
-            raster.Triangle(
-                vertex.tr(new vector3(0f, 0.5f, 0f)),
-                vertex.tr(new vector3(1.3f, 0.5f, 0f)),
-                vertex.tr(new vector3(0.5f, -0.5f, 0f)),
-                new vector3(255, 0, 0), new vector3(0, 255, 0), new vector3(0, 0, 255));
-            */
-            buffer.SaveImage();
+            //Reflect
+            Console.WriteLine("SSE Reflect:" + MathSSE.Reflect(testv, test2v));
+            Console.WriteLine("FPU Reflect:" + vector3.Reflect(testv, test2v));
+
+            //Saturate
+            Console.WriteLine("SSE Saturate:" + MathSSE.Saturate(testv));
+            Console.WriteLine("FPU Saturate:" + VertexProcessor.Saturate(testv));
+
+            //Vector 4
+            Console.WriteLine("SSE Add Vector4 by Vector4: " + MathSSE.Add(testV41, testV42));
+            Console.WriteLine("FPU Add Vector4 by Vector4: " + (testV41 + testV42));
+            Console.WriteLine("SSE Substract Vector4 by Vector4: " + MathSSE.Substract(testV41, testV42));
+            Console.WriteLine("FPU Substract Vector4 by Vector4: " + (testV41 - testV42));
+            Console.WriteLine("SSE Multiply Vector4 by Vector4: " + MathSSE.Multiply(testV41, testV42));
+            Console.WriteLine("FPU Multiply Vector4 by Vector4: " + (testV41 * testV42));
+            Console.WriteLine("SSE Divide Vector4 by Vector4: " + MathSSE.Divide(testV41, testV42));
+            Console.WriteLine("FPU Divide Vector4 by Vector4: " + (testV41 / testV42));
+            Console.WriteLine("SSE Normalize Vector4: " + MathSSE.Normalize(testV41));
+            Console.WriteLine("FPU Normalize Vector4: " + testV41.Normalize2(testV41));
+
+            //Matrix by Matrix mul
+            Console.WriteLine("SSE Matrix by Matrix mul:\n" + MathSSE.Mul(matTest, matTest2));
+            Console.WriteLine("FPU Matrix Matrix mul:\n" + (matTest.MultiplyMatrixByMatrix(matTest2)));
+
+            // Matrix bu Vector
+            Console.WriteLine("SSE Matrix by Vector4 mul:\n" + MathSSE.Mul(matTest, testV41));
+            Console.WriteLine("FPU Matrix by Vector4 mul:\n" + (matTest.MultiplyMatrixByVector(testV41)));
         }
     }
 }
